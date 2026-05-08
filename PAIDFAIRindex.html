@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PaidFair — Global Salary Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green: #00ff87;
+      --red: #ff3b3b;
+      --yellow: #ffd166;
+      --bg: #080808;
+      --bg2: #0d0d0d;
+      --bg3: #111;
+      --border: #1e1e1e;
+      --text: #e0e0e0;
+      --muted: #555;
+      --dimmed: #2a2a2a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grid bg */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,255,135,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,135,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Scanlines */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 56px 24px 100px;
+    }
+
+    /* HEADER */
+    .header { margin-bottom: 60px; }
+
+    .status-dot {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 14px var(--green);
+      animation: blink 2s infinite;
+    }
+
+    .status-label {
+      font-size: 11px;
+      color: var(--green);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(64px, 12vw, 110px);
+      line-height: 0.88;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    h1 span { color: var(--green); }
+
+    .tagline {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 500px;
+    }
+
+    .tagline strong { color: #888; font-weight: 400; }
+
+    /* FORM */
+    .form-box {
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--green);
+      background: var(--bg2);
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .form-label {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field.full { grid-column: 1 / -1; }
+
+    .field label {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .field input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-bottom: 1px solid #333;
+      color: var(--text);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 15px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .field input:focus { border-color: var(--green); }
+    .field input::placeholder { color: var(--dimmed); }
+
+    .field .hint {
+      font-size: 10px;
+      color: #333;
+      margin-top: 2px;
+    }
+
+    .form-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .form-hint {
+      font-size: 11px;
+      color: #333;
+    }
+
+    .btn {
+      background: var(--green);
+      color: #000;
+      border: none;
+      padding: 12px 32px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover:not(:disabled) { background: #00cc6a; transform: translateX(3px); }
+    .btn:disabled { background: var(--bg3); color: var(--green); border: 1px solid var(--green); cursor: default; }
+
+    /* ERROR */
+    .error-box {
+      border: 1px solid var(--red);
+      background: #1a0000;
+      padding: 16px 20px;
+      color: var(--red);
+      font-size: 13px;
+      margin-bottom: 24px;
+      display: none;
+    }
+
+    /* RESULT */
+    #result { display: none; animation: fadeUp 0.4s ease; }
+
+    .result-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+
+    .result-meta {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .result-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(28px, 5vw, 48px);
+      color: #fff;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .result-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* VERDICT */
+    .verdict-box {
+      padding: 22px 26px;
+      margin-bottom: 28px;
+      border-left: 3px solid var(--green);
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .verdict-box.underpaid { border-left-color: var(--red); }
+    .verdict-box.fair { border-left-color: var(--yellow); }
+    .verdict-box.wellpaid { border-left-color: var(--green); }
+
+    .verdict-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .verdict-text {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .verdict-text.underpaid { color: var(--red); }
+    .verdict-text.fair { color: var(--yellow); }
+    .verdict-text.wellpaid { color: var(--green); }
+
+    /* BANDS */
+    .bands-label {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+
+    .bands-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .band {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 20px 16px;
+      position: relative;
+    }
+
+    .band.active { border-color: var(--green); }
+    .band.active::after {
+      content: '◀ YOU';
+      position: absolute;
+      top: 8px; right: 10px;
+      font-size: 9px;
+      color: var(--green);
+      letter-spacing: 1px;
+    }
+
+    .band-top { height: 2px; margin: -20px -16px 16px; }
+    .band-top.low { background: var(--red); }
+    .band-top.mid { background: var(--yellow); }
+    .band-top.high { background: var(--green); }
+
+    .band-name {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .band-usd {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .band-label-small {
+      font-size: 10px;
+      color: #333;
+    }
+
+    /* YOUR ESTIMATE */
+    .estimate-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--green);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .estimate-left .elabel {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+
+    .estimate-left .esub {
+      font-size: 11px;
+      color: #444;
+    }
+
+    .estimate-right .evalue {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--green);
+      text-align: right;
+    }
+
+    .estimate-right .ecurrency {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    /* NEGOTIATION FLOOR */
+    .floor-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--yellow);
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .floor-left .flabel {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+
+    .floor-left .fsub {
+      font-size: 11px;
+      color: #444;
+    }
+
+    .floor-right .fvalue {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--yellow);
+      text-align: right;
+    }
+
+    .floor-right .fcurrency {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    /* COMPARISON NOTE */
+    .comparison-box {
+      background: #0a1a0a;
+      border: 1px solid #00ff8722;
+      border-left: 3px solid var(--green);
+      padding: 20px 24px;
+      margin-bottom: 28px;
+    }
+
+    .comparison-box .clabel {
+      font-size: 10px;
+      color: var(--green);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .comparison-box .ctext {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      color: #aaa;
+      line-height: 1.7;
+    }
+
+    /* FOOTER */
+    .result-footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #111;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .result-footer .left { font-size: 11px; color: #2a2a2a; }
+    .result-footer .right { font-size: 11px; color: var(--green); }
+
+    /* EMPTY STATE */
+    .empty-state {
+      margin-top: 40px;
+      padding: 48px;
+      border: 1px dashed var(--dimmed);
+      text-align: center;
+    }
+
+    .empty-state .globe { font-size: 36px; margin-bottom: 20px; }
+
+    .empty-state .examples {
+      font-size: 13px;
+      color: #2a2a2a;
+      line-height: 2.2;
+    }
+
+    .empty-state .examples span { color: #3a3a3a; }
+
+    /* ANIMATIONS */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes countUp {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .bands-grid { grid-template-columns: 1fr; }
+      .wrap { padding: 32px 16px 80px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="status-dot">
+      <div class="dot"></div>
+      <span class="status-label">Live Market Intelligence</span>
+    </div>
+    <h1>PAID<span>FAIR</span></h1>
+    <p class="tagline">
+      Global salary intelligence. Any job. Any country. Any currency.<br>
+      <strong>Powered by multi-validator AI consensus on GenLayer.</strong>
+    </p>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-box">
+    <div class="form-label">&gt; Query Parameters</div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Job Title</label>
+        <input type="text" id="job_title" placeholder="Software Engineer, Farmer, Plumber..." />
+      </div>
+      <div class="field">
+        <label>Work Region</label>
+        <input type="text" id="work_region" placeholder="Lagos Nigeria, Tokyo Japan..." />
+        <span class="hint">City + Country for best results</span>
+      </div>
+      <div class="field">
+        <label>Years of Experience</label>
+        <input type="number" id="years_experience" placeholder="5" min="0" max="50" />
+      </div>
+      <div class="field">
+        <label>Current Annual Salary (USD)</label>
+        <input type="number" id="current_salary" placeholder="Optional — e.g. 30000" min="0" />
+        <span class="hint">Leave empty if you prefer not to share</span>
+      </div>
+    </div>
+    <div class="form-footer">
+      <span class="form-hint">Enter ↵ to analyze · Any language accepted</span>
+      <button class="btn" id="analyzeBtn" onclick="analyze()">ANALYZE →</button>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-box" id="errorBox"></div>
+
+  <!-- RESULT -->
+  <div id="result">
+    <div class="result-header">
+      <div class="result-meta">ANALYSIS RESULT</div>
+      <div class="result-title" id="r_title"></div>
+      <div class="result-sub" id="r_region"></div>
+    </div>
+
+    <div class="verdict-box" id="r_verdict_box">
+      <div class="verdict-label">VERDICT</div>
+      <div class="verdict-text" id="r_verdict_text"></div>
+    </div>
+
+    <div class="bands-label">ANNUAL SALARY BANDS (USD)</div>
+    <div class="bands-grid">
+      <div class="band" id="band_low">
+        <div class="band-top low"></div>
+        <div class="band-name">Entry Level</div>
+        <div class="band-usd" id="r_low"></div>
+        <div class="band-label-small">USD / Year</div>
+      </div>
+      <div class="band" id="band_mid">
+        <div class="band-top mid"></div>
+        <div class="band-name">Mid Career</div>
+        <div class="band-usd" id="r_mid"></div>
+        <div class="band-label-small">USD / Year</div>
+      </div>
+      <div class="band" id="band_high">
+        <div class="band-top high"></div>
+        <div class="band-name">Senior</div>
+        <div class="band-usd" id="r_high"></div>
+        <div class="band-label-small">USD / Year</div>
+      </div>
+    </div>
+
+    <div class="estimate-box">
+      <div class="estimate-left">
+        <div class="elabel">YOUR SALARY ESTIMATE</div>
+        <div class="esub" id="r_exp_label">Based on your experience</div>
+      </div>
+      <div class="estimate-right">
+        <div class="evalue" id="r_estimate"></div>
+        <div class="ecurrency">USD / Year</div>
+      </div>
+    </div>
+
+    <div class="floor-box">
+      <div class="floor-left">
+        <div class="flabel">NEGOTIATION FLOOR</div>
+        <div class="fsub">Do not accept below this</div>
+      </div>
+      <div class="floor-right">
+        <div class="fvalue" id="r_floor"></div>
+        <div class="fcurrency">USD / Year</div>
+      </div>
+    </div>
+
+    <div class="comparison-box" id="r_comparison_box" style="display:none">
+      <div class="clabel">YOUR SALARY vs MARKET</div>
+      <div class="ctext" id="r_comparison_text"></div>
+    </div>
+
+    <div class="result-footer">
+      <span class="left">Powered by multi-validator AI consensus · PaidFair Protocol</span>
+      <span class="right">◆ on-chain verified</span>
+    </div>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div class="empty-state" id="emptyState">
+    <div class="globe">🌍</div>
+    <div class="examples">
+      Fliesenleger · Buenos Aires &nbsp;→&nbsp; Tile Layer · Tokyo<br>
+      Plombier · Paris &nbsp;→&nbsp; Software Engineer · Lagos<br>
+      Farmer · Germany &nbsp;→&nbsp; Nurse · Manila Philippines<br>
+      <span>Any job. Any region. Any language.</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const SYSTEM_PROMPT = `You are PaidFair — a global salary intelligence engine.
+CRITICAL: Always respond in the SAME LANGUAGE as the job_title and work_region input.
+
+Respond using ONLY the following JSON format, nothing else:
+{
+  "job_title": "...",
+  "work_region": "...",
+  "currency_code": "ISO code",
+  "salary_low_usd": 0,
+  "salary_mid_usd": 0,
+  "salary_high_usd": 0,
+  "your_estimate_usd": 0,
+  "negotiation_floor_usd": 0,
+  "verdict": "one brutal honest sentence",
+  "assessment": "UNDERPAID or FAIR or WELLPAID",
+  "comparison_note": "only if current salary provided, else empty string"
+}
+
+Rules:
+- All salary values are ANNUAL GROSS in USD
+- your_estimate_usd is based on the years_experience provided
+- assessment is based on comparison to market if current salary provided, else based on general market
+- Only JSON, nothing else, no markdown.`;
+
+  function fmt(n) {
+    return '$' + new Intl.NumberFormat('en-US').format(Math.round(n));
+  }
+
+  async function analyze() {
+    const job = document.getElementById('job_title').value.trim();
+    const region = document.getElementById('work_region').value.trim();
+    const years = document.getElementById('years_experience').value.trim();
+    const salary = document.getElementById('current_salary').value.trim();
+
+    if (!job || !region || !years) {
+      showError('Please fill in Job Title, Work Region and Years of Experience.');
+      return;
+    }
+
+    const btn = document.getElementById('analyzeBtn');
+    btn.disabled = true;
+    btn.textContent = 'ANALYZING...';
+    document.getElementById('errorBox').style.display = 'none';
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'none';
+
+    let dots = 0;
+    const interval = setInterval(() => {
+      dots = (dots + 1) % 4;
+      btn.textContent = 'ANALYZING' + '.'.repeat(dots);
+    }, 400);
+
+    const userMsg = `Job: ${job}\nWork Region: ${region}\nYears of Experience: ${years}\nCurrent annual salary in USD: ${salary || 'not provided'}`;
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: SYSTEM_PROMPT,
+          messages: [{ role: 'user', content: userMsg }]
+        })
+      });
+
+      const data = await res.json();
+      const raw = data.content?.find(b => b.type === 'text')?.text || '';
+      const start = raw.indexOf('{');
+      const end = raw.lastIndexOf('}') + 1;
+      const parsed = JSON.parse(raw.slice(start, end));
+      renderResult(parsed, years, salary);
+    } catch (e) {
+      showError('Analysis failed. Please try again.');
+      document.getElementById('emptyState').style.display = 'block';
+    } finally {
+      clearInterval(interval);
+      btn.disabled = false;
+      btn.textContent = 'ANALYZE →';
+    }
+  }
+
+  function renderResult(d, years, salary) {
+    document.getElementById('r_title').textContent = d.job_title;
+    document.getElementById('r_region').textContent = '📍 ' + d.work_region + ' · ' + d.currency_code;
+    document.getElementById('r_low').textContent = fmt(d.salary_low_usd);
+    document.getElementById('r_mid').textContent = fmt(d.salary_mid_usd);
+    document.getElementById('r_high').textContent = fmt(d.salary_high_usd);
+    document.getElementById('r_estimate').textContent = fmt(d.your_estimate_usd);
+    document.getElementById('r_floor').textContent = fmt(d.negotiation_floor_usd);
+    document.getElementById('r_exp_label').textContent = 'Based on ' + years + ' years of experience';
+
+    // Verdict
+    const assessment = (d.assessment || '').toUpperCase();
+    const verdictBox = document.getElementById('r_verdict_box');
+    const verdictText = document.getElementById('r_verdict_text');
+    verdictBox.className = 'verdict-box ' + assessment.toLowerCase();
+    verdictText.className = 'verdict-text ' + assessment.toLowerCase();
+
+    const emoji = assessment === 'UNDERPAID' ? '🔴' : assessment === 'WELLPAID' ? '🟢' : '🟡';
+    verdictText.textContent = emoji + ' ' + d.verdict;
+
+    // Active band
+    ['low', 'mid', 'high'].forEach(b => {
+      document.getElementById('band_' + b).classList.remove('active');
+    });
+    const yrs = parseInt(years);
+    const activeBand = yrs <= 2 ? 'low' : yrs <= 6 ? 'mid' : 'high';
+    document.getElementById('band_' + activeBand).classList.add('active');
+
+    // Comparison note
+    const compBox = document.getElementById('r_comparison_box');
+    if (salary && d.comparison_note) {
+      document.getElementById('r_comparison_text').textContent = d.comparison_note;
+      compBox.style.display = 'block';
+    } else {
+      compBox.style.display = 'none';
+    }
+
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function showError(msg) {
+    const box = document.getElementById('errorBox');
+    box.textContent = '⚠ ' + msg;
+    box.style.display = 'block';
+  }
+
+  // Enter key support
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !document.getElementById('analyzeBtn').disabled) analyze();
+  });
+</script>
+</body>
+</html>
