@@ -67,12 +67,12 @@
     .result-meta { font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-bottom: 10px; }
     .result-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 5vw, 48px); color: #fff; letter-spacing: 1px; margin-bottom: 6px; }
     .result-sub { font-size: 13px; color: var(--muted); }
-    .verdict-box { padding: 22px 26px; margin-bottom: 28px; border-left: 3px solid var(--green); background: var(--bg2); border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .verdict-box { padding: 24px 28px; margin-bottom: 28px; border-left: 3px solid var(--green); background: var(--bg2); border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .verdict-box.underpaid { border-left-color: var(--red); }
     .verdict-box.fair { border-left-color: var(--yellow); }
     .verdict-box.wellpaid { border-left-color: var(--green); }
-    .verdict-label { font-size: 10px; letter-spacing: 2px; color: var(--muted); margin-bottom: 10px; }
-    .verdict-text { font-family: 'IBM Plex Sans', sans-serif; font-size: 16px; font-weight: 600; line-height: 1.5; }
+    .verdict-label { font-size: 10px; letter-spacing: 2px; color: var(--muted); margin-bottom: 12px; }
+    .verdict-text { font-family: 'IBM Plex Sans', sans-serif; font-size: 16px; font-weight: 600; line-height: 1.7; margin-bottom: 0; }
     .verdict-text.underpaid { color: var(--red); }
     .verdict-text.fair { color: var(--yellow); }
     .verdict-text.wellpaid { color: var(--green); }
@@ -98,6 +98,17 @@
     .floor-left .fsub { font-size: 11px; color: #444; }
     .floor-right .fvalue { font-size: 28px; font-weight: 700; color: var(--yellow); text-align: right; }
     .floor-right .fcurrency { font-size: 12px; color: var(--muted); text-align: right; }
+
+    /* INTERVIEW TIPS */
+    .tips-box { background: var(--bg2); border: 1px solid var(--border); border-top: 2px solid var(--yellow); padding: 24px 28px; margin-bottom: 28px; }
+    .tips-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .tips-label { font-size: 10px; color: var(--yellow); letter-spacing: 2px; text-transform: uppercase; }
+    .tip-item { display: flex; gap: 16px; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #161616; }
+    .tip-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .tip-number { font-size: 22px; font-weight: 700; color: var(--dimmed); flex-shrink: 0; line-height: 1.2; }
+    .tip-content .tip-title { font-size: 12px; color: var(--yellow); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+    .tip-content .tip-text { font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; color: #888; line-height: 1.7; }
+
     .comparison-box { background: #0a1a0a; border: 1px solid #00ff8722; border-left: 3px solid var(--green); padding: 20px 24px; margin-bottom: 28px; }
     .comparison-box .clabel { font-size: 10px; color: var(--green); letter-spacing: 2px; margin-bottom: 8px; }
     .comparison-box .ctext { font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; color: #aaa; line-height: 1.7; }
@@ -177,10 +188,12 @@
       <div class="result-title" id="r_title"></div>
       <div class="result-sub" id="r_region"></div>
     </div>
+
     <div class="verdict-box" id="r_verdict_box">
       <div class="verdict-label">VERDICT</div>
       <div class="verdict-text" id="r_verdict_text"></div>
     </div>
+
     <div class="bands-label">ANNUAL SALARY BANDS (USD)</div>
     <div class="bands-grid">
       <div class="band" id="band_low">
@@ -202,6 +215,7 @@
         <div class="band-label-small">USD / Year</div>
       </div>
     </div>
+
     <div class="estimate-box">
       <div class="estimate-left">
         <div class="elabel">YOUR SALARY ESTIMATE</div>
@@ -212,6 +226,7 @@
         <div class="ecurrency">USD / Year</div>
       </div>
     </div>
+
     <div class="floor-box">
       <div class="floor-left">
         <div class="flabel">NEGOTIATION FLOOR</div>
@@ -222,10 +237,20 @@
         <div class="fcurrency">USD / Year</div>
       </div>
     </div>
+
+    <!-- INTERVIEW TIPS -->
+    <div class="tips-box">
+      <div class="tips-header">
+        <div class="tips-label">💡 Interview Negotiation Tips</div>
+      </div>
+      <div id="r_tips"></div>
+    </div>
+
     <div class="comparison-box" id="r_comparison_box" style="display:none">
       <div class="clabel">YOUR SALARY vs MARKET</div>
       <div class="ctext" id="r_comparison_text"></div>
     </div>
+
     <div class="result-footer">
       <span class="left">Powered by multi-validator AI consensus · PaidFair Protocol</span>
       <span class="right">◆ on-chain verified · GenLayer Testnet</span>
@@ -248,7 +273,7 @@
   import { createClient } from 'https://esm.sh/genlayer-js@latest';
   import { studionet } from 'https://esm.sh/genlayer-js@latest/chains';
 
-  const CONTRACT_ADDRESS = '0x5c1d623819a41e79E0aa88e8abFdAEAccc5440f8';
+  const CONTRACT_ADDRESS = '0x94582C426DCf506796546520255F33d1b0367244';
   const GENLAYER_CHAIN_ID = '0xf22f';
 
   let walletAddress = null;
@@ -262,56 +287,34 @@
     try {
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       walletAddress = accounts[0];
-
       try {
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: GENLAYER_CHAIN_ID }],
-        });
+        await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: GENLAYER_CHAIN_ID }] });
       } catch (switchError) {
         if (switchError.code === 4902) {
           await window.ethereum.request({
             method: 'wallet_addEthereumChain',
-            params: [{
-              chainId: GENLAYER_CHAIN_ID,
-              chainName: 'GenLayer Studio',
-              rpcUrls: ['https://studio.genlayer.com/api'],
-              nativeCurrency: { name: 'GEN', symbol: 'GEN', decimals: 18 },
-            }],
+            params: [{ chainId: GENLAYER_CHAIN_ID, chainName: 'GenLayer Studio', rpcUrls: ['https://studio.genlayer.com/api'], nativeCurrency: { name: 'GEN', symbol: 'GEN', decimals: 18 } }]
           });
-        } else {
-          throw switchError;
-        }
+        } else throw switchError;
       }
-
       client = createClient({ chain: studionet, account: walletAddress });
-
       document.getElementById('walletInfo').textContent = 'Wallet connected';
       document.getElementById('walletAddress').textContent = walletAddress.slice(0,6) + '...' + walletAddress.slice(-4);
       const btn = document.getElementById('connectBtn');
       btn.textContent = 'Connected';
       btn.classList.add('connected');
-
     } catch (e) {
       showError('Wallet connection failed: ' + (e.message || 'Unknown error'));
     }
   }
 
   async function analyze() {
-    if (!walletAddress || !client) {
-      showError('Please connect your wallet first.');
-      return;
-    }
-
+    if (!walletAddress || !client) { showError('Please connect your wallet first.'); return; }
     const job    = document.getElementById('job_title').value.trim();
     const region = document.getElementById('work_region').value.trim();
     const years  = document.getElementById('years_experience').value.trim();
     const salary = document.getElementById('current_salary').value.trim();
-
-    if (!job || !region || !years) {
-      showError('Please fill in Job Title, Work Region and Years of Experience.');
-      return;
-    }
+    if (!job || !region || !years) { showError('Please fill in Job Title, Work Region and Years of Experience.'); return; }
 
     const btn = document.getElementById('analyzeBtn');
     btn.disabled = true;
@@ -320,50 +323,20 @@
     document.getElementById('emptyState').style.display = 'none';
 
     let dots = 0;
-    const interval = setInterval(() => {
-      dots = (dots + 1) % 4;
-      btn.textContent = 'ANALYZING' + '.'.repeat(dots);
-    }, 400);
+    const interval = setInterval(() => { dots = (dots + 1) % 4; btn.textContent = 'ANALYZING' + '.'.repeat(dots); }, 400);
 
     try {
       setStatus('⬡ Submitting to GenLayer network...<br>⬡ MetaMask will ask you to sign the transaction.');
-
-      const txHash = await client.writeContract({
-        address: CONTRACT_ADDRESS,
-        functionName: 'analyze_salary',
-        args: [job, region, years, salary || ''],
-        value: 0,
-      });
-
-      setStatus(
-        `⬡ Transaction submitted: <span style="color:#888">${txHash.slice(0,20)}...</span><br>` +
-        `⬡ Validators are independently analyzing your query.<br>` +
-        `⬡ Waiting for consensus — this takes 2–3 minutes...`
-      );
-
-      await client.waitForTransactionReceipt({
-        hash: txHash,
-        status: 'FINALIZED',
-        retries: 60,
-        interval: 5000,
-      });
-
+      const txHash = await client.writeContract({ address: CONTRACT_ADDRESS, functionName: 'analyze_salary', args: [job, region, years, salary || ''], value: 0 });
+      setStatus(`⬡ Transaction submitted: <span style="color:#888">${txHash.slice(0,20)}...</span><br>⬡ Validators are independently analyzing your query.<br>⬡ Waiting for consensus — this takes 2–3 minutes...`);
+      await client.waitForTransactionReceipt({ hash: txHash, status: 'FINALIZED', retries: 60, interval: 5000 });
       setStatus('⬡ Consensus reached. Fetching result...');
-
-      const raw = await client.readContract({
-        address: CONTRACT_ADDRESS,
-        functionName: 'get_result',
-        args: [walletAddress],
-      });
-
+      const raw = await client.readContract({ address: CONTRACT_ADDRESS, functionName: 'get_result', args: [walletAddress] });
       if (!raw) throw new Error('No result returned. Try again.');
-
       const parsed = JSON.parse(raw);
       if (parsed.error) throw new Error('Contract returned parse error.');
-
       setStatus('');
       renderResult(parsed, years, salary);
-
     } catch (e) {
       setStatus('');
       showError(e.message || 'Analysis failed. Please try again.');
@@ -395,6 +368,22 @@
     const yrs = parseInt(years);
     document.getElementById('band_' + (yrs <= 2 ? 'low' : yrs <= 6 ? 'mid' : 'high')).classList.add('active');
 
+    // INTERVIEW TIPS
+    const tipsContainer = document.getElementById('r_tips');
+    tipsContainer.innerHTML = '';
+    if (d.interview_tips && Array.isArray(d.interview_tips)) {
+      d.interview_tips.forEach((tip, i) => {
+        tipsContainer.innerHTML += `
+          <div class="tip-item">
+            <div class="tip-number">0${i+1}</div>
+            <div class="tip-content">
+              <div class="tip-title">${tip.title || ''}</div>
+              <div class="tip-text">${tip.text || ''}</div>
+            </div>
+          </div>`;
+      });
+    }
+
     const compBox = document.getElementById('r_comparison_box');
     if (salary && d.comparison_note) {
       document.getElementById('r_comparison_text').textContent = d.comparison_note;
@@ -409,25 +398,12 @@
   }
 
   function fmt(n) { return '$' + new Intl.NumberFormat('en-US').format(Math.round(n)); }
-
-  function setStatus(msg) {
-    const box = document.getElementById('statusBox');
-    box.style.display = msg ? 'block' : 'none';
-    box.innerHTML = msg || '';
-  }
-
-  function showError(msg) {
-    const box = document.getElementById('errorBox');
-    box.textContent = '⚠ ' + msg;
-    box.style.display = 'block';
-  }
+  function setStatus(msg) { const b = document.getElementById('statusBox'); b.style.display = msg ? 'block' : 'none'; b.innerHTML = msg || ''; }
+  function showError(msg) { const b = document.getElementById('errorBox'); b.textContent = '⚠ ' + msg; b.style.display = 'block'; }
 
   window.connectWallet = connectWallet;
   window.analyze = analyze;
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !document.getElementById('analyzeBtn').disabled) analyze();
-  });
+  document.addEventListener('keydown', e => { if (e.key === 'Enter' && !document.getElementById('analyzeBtn').disabled) analyze(); });
 </script>
 </body>
 </html>
