@@ -31,8 +31,6 @@
       pointer-events: none; z-index: 0;
     }
     .wrap { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 56px 24px 100px; }
-
-    /* HEADER */
     .header { margin-bottom: 48px; }
     .status-dot { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
     .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 14px var(--green); animation: blink 2s infinite; }
@@ -41,66 +39,34 @@
     h1 span { color: var(--green); }
     .tagline { font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 500px; }
     .tagline strong { color: #888; font-weight: 400; }
-
-    /* WALLET CONNECT */
-    .wallet-bar {
-      border: 1px solid var(--border); border-top: 2px solid #333;
-      background: var(--bg2); padding: 16px 20px; margin-bottom: 24px;
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
-    }
+    .wallet-bar { border: 1px solid var(--border); border-top: 2px solid #333; background: var(--bg2); padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
     .wallet-info { font-size: 12px; color: var(--muted); }
     .wallet-address { font-size: 12px; color: var(--green); }
-    .btn-wallet {
-      background: transparent; color: var(--green); border: 1px solid var(--green);
-      padding: 8px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 12px;
-      font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s;
-    }
+    .btn-wallet { background: transparent; color: var(--green); border: 1px solid var(--green); padding: 8px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
     .btn-wallet:hover { background: var(--green); color: #000; }
     .btn-wallet.connected { border-color: #333; color: #444; cursor: default; }
     .btn-wallet.connected:hover { background: transparent; color: #444; }
-
-    /* FORM */
     .form-box { border: 1px solid var(--border); border-top: 2px solid var(--green); background: var(--bg2); padding: 28px; margin-bottom: 32px; }
     .form-label { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
     .field { display: flex; flex-direction: column; gap: 6px; }
     .field label { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
-    .field input {
-      background: var(--bg); border: 1px solid var(--border); border-bottom: 1px solid #333;
-      color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 15px;
-      padding: 12px 14px; outline: none; transition: border-color 0.2s; width: 100%;
-    }
+    .field input { background: var(--bg); border: 1px solid var(--border); border-bottom: 1px solid #333; color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 15px; padding: 12px 14px; outline: none; transition: border-color 0.2s; width: 100%; }
     .field input:focus { border-color: var(--green); }
     .field input::placeholder { color: var(--dimmed); }
     .field .hint { font-size: 10px; color: #333; margin-top: 2px; }
     .form-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 20px; flex-wrap: wrap; gap: 12px; }
     .form-hint { font-size: 11px; color: #333; }
-    .btn {
-      background: var(--green); color: #000; border: none; padding: 12px 32px;
-      font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700;
-      letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s;
-    }
+    .btn { background: var(--green); color: #000; border: none; padding: 12px 32px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
     .btn:hover:not(:disabled) { background: #00cc6a; transform: translateX(3px); }
     .btn:disabled { background: var(--bg3); color: var(--green); border: 1px solid var(--green); cursor: default; }
-
-    /* STATUS / ERROR */
-    .status-box {
-      border: 1px solid var(--border); border-left: 3px solid var(--green);
-      background: var(--bg2); padding: 16px 20px; margin-bottom: 24px;
-      font-size: 12px; color: var(--green); display: none; line-height: 2;
-    }
-    .error-box {
-      border: 1px solid var(--red); background: #1a0000;
-      padding: 16px 20px; color: var(--red); font-size: 13px; margin-bottom: 24px; display: none;
-    }
-
-    /* RESULT */
+    .status-box { border: 1px solid var(--border); border-left: 3px solid var(--green); background: var(--bg2); padding: 16px 20px; margin-bottom: 24px; font-size: 12px; color: var(--green); display: none; line-height: 2; }
+    .error-box { border: 1px solid var(--red); background: #1a0000; padding: 16px 20px; color: var(--red); font-size: 13px; margin-bottom: 24px; display: none; }
     #result { display: none; animation: fadeUp 0.4s ease; }
     .result-header { border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 32px; }
     .result-meta { font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-bottom: 10px; }
     .result-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 5vw, 48px); color: #fff; letter-spacing: 1px; margin-bottom: 6px; }
     .result-sub { font-size: 13px; color: var(--muted); }
-
     .verdict-box { padding: 22px 26px; margin-bottom: 28px; border-left: 3px solid var(--green); background: var(--bg2); border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .verdict-box.underpaid { border-left-color: var(--red); }
     .verdict-box.fair { border-left-color: var(--yellow); }
@@ -110,7 +76,6 @@
     .verdict-text.underpaid { color: var(--red); }
     .verdict-text.fair { color: var(--yellow); }
     .verdict-text.wellpaid { color: var(--green); }
-
     .bands-label { font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-bottom: 16px; }
     .bands-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
     .band { background: var(--bg2); border: 1px solid var(--border); padding: 20px 16px; position: relative; }
@@ -123,35 +88,28 @@
     .band-name { font-size: 10px; letter-spacing: 2px; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; }
     .band-usd { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 4px; }
     .band-label-small { font-size: 10px; color: #333; }
-
     .estimate-box { display: flex; justify-content: space-between; align-items: center; background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid var(--green); padding: 20px 24px; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
     .estimate-left .elabel { font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-bottom: 4px; }
     .estimate-left .esub { font-size: 11px; color: #444; }
     .estimate-right .evalue { font-size: 32px; font-weight: 700; color: var(--green); text-align: right; }
     .estimate-right .ecurrency { font-size: 12px; color: var(--muted); text-align: right; }
-
     .floor-box { display: flex; justify-content: space-between; align-items: center; background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid var(--yellow); padding: 20px 24px; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
     .floor-left .flabel { font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-bottom: 4px; }
     .floor-left .fsub { font-size: 11px; color: #444; }
     .floor-right .fvalue { font-size: 28px; font-weight: 700; color: var(--yellow); text-align: right; }
     .floor-right .fcurrency { font-size: 12px; color: var(--muted); text-align: right; }
-
     .comparison-box { background: #0a1a0a; border: 1px solid #00ff8722; border-left: 3px solid var(--green); padding: 20px 24px; margin-bottom: 28px; }
     .comparison-box .clabel { font-size: 10px; color: var(--green); letter-spacing: 2px; margin-bottom: 8px; }
     .comparison-box .ctext { font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; color: #aaa; line-height: 1.7; }
-
     .result-footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #111; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
     .result-footer .left { font-size: 11px; color: #2a2a2a; }
     .result-footer .right { font-size: 11px; color: var(--green); }
-
     .empty-state { margin-top: 40px; padding: 48px; border: 1px dashed var(--dimmed); text-align: center; }
     .empty-state .globe { font-size: 36px; margin-bottom: 20px; }
     .empty-state .examples { font-size: 13px; color: #2a2a2a; line-height: 2.2; }
     .empty-state .examples span { color: #3a3a3a; }
-
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-
     @media (max-width: 600px) {
       .form-grid { grid-template-columns: 1fr; }
       .bands-grid { grid-template-columns: 1fr; }
@@ -174,7 +132,6 @@
     </p>
   </div>
 
-  <!-- WALLET BAR -->
   <div class="wallet-bar">
     <div>
       <div class="wallet-info" id="walletInfo">Connect your wallet to use PaidFair</div>
@@ -183,7 +140,6 @@
     <button class="btn-wallet" id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
   </div>
 
-  <!-- FORM -->
   <div class="form-box">
     <div class="form-label">&gt; Query Parameters</div>
     <div class="form-grid">
@@ -293,33 +249,26 @@
   import { studionet } from 'https://esm.sh/genlayer-js@latest/chains';
 
   const CONTRACT_ADDRESS = '0x5c1d623819a41e79E0aa88e8abFdAEAccc5440f8';
-
-  // GenLayer Studio network config
-  const GENLAYER_CHAIN_ID = '0xF26F'; // 61999 in hex
+  const GENLAYER_CHAIN_ID = '0xf22f';
 
   let walletAddress = null;
   let client = null;
 
-  // ── WALLET CONNECT ──────────────────────────────────────────
   async function connectWallet() {
     if (!window.ethereum) {
       showError('MetaMask not found. Please install MetaMask to use PaidFair.');
       return;
     }
-
     try {
-      // Request accounts
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       walletAddress = accounts[0];
 
-      // Switch to GenLayer Studio network
       try {
         await window.ethereum.request({
           method: 'wallet_switchEthereumChain',
           params: [{ chainId: GENLAYER_CHAIN_ID }],
         });
       } catch (switchError) {
-        // Network not added yet — add it
         if (switchError.code === 4902) {
           await window.ethereum.request({
             method: 'wallet_addEthereumChain',
@@ -335,12 +284,10 @@
         }
       }
 
-      // Create GenLayer client with MetaMask address
       client = createClient({ chain: studionet, account: walletAddress });
 
-      // Update UI
       document.getElementById('walletInfo').textContent = 'Wallet connected';
-      document.getElementById('walletAddress').textContent = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
+      document.getElementById('walletAddress').textContent = walletAddress.slice(0,6) + '...' + walletAddress.slice(-4);
       const btn = document.getElementById('connectBtn');
       btn.textContent = 'Connected';
       btn.classList.add('connected');
@@ -350,7 +297,6 @@
     }
   }
 
-  // ── ANALYZE ────────────────────────────────────────────────
   async function analyze() {
     if (!walletAddress || !client) {
       showError('Please connect your wallet first.');
@@ -429,7 +375,6 @@
     }
   }
 
-  // ── RENDER ──────────────────────────────────────────────────
   function renderResult(d, years, salary) {
     document.getElementById('r_title').textContent = d.job_title || '';
     document.getElementById('r_region').textContent = '📍 ' + (d.work_region || '') + ' · ' + (d.currency_code || 'USD');
@@ -463,7 +408,6 @@
     document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  // ── HELPERS ─────────────────────────────────────────────────
   function fmt(n) { return '$' + new Intl.NumberFormat('en-US').format(Math.round(n)); }
 
   function setStatus(msg) {
