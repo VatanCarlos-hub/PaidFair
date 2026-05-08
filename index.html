@@ -3,267 +3,921 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PaidFair — Global Salary Intelligence</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+  <title>PaidFair — Know Your Worth</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600;1,700&family=Space+Grotesk:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --green: #00ff87;
-      --red: #ff3b3b;
-      --yellow: #ffd166;
-      --bg: #080808;
-      --bg2: #0d0d0d;
-      --bg3: #111;
-      --border: #1e1e1e;
-      --text: #e0e0e0;
-      --muted: #555;
-      --dimmed: #2a2a2a;
+      --gold: #d4a843;
+      --gold2: #f0c966;
+      --gold3: #8a6a20;
+      --bg: #06070d;
+      --bg2: #0b0d16;
+      --bg3: #10121e;
+      --border: #1c1f30;
+      --border2: #252840;
+      --cream: #ede8df;
+      --cream2: #c8c2b6;
+      --muted: #4a4d60;
+      --red: #e05555;
+      --green: #4ecb82;
+      --blue-glow: rgba(80, 100, 255, 0.06);
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Mono', monospace; min-height: 100vh; overflow-x: hidden; }
-    body::before {
-      content: ''; position: fixed; inset: 0;
-      background-image: linear-gradient(rgba(0,255,135,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,135,0.025) 1px, transparent 1px);
-      background-size: 48px 48px; pointer-events: none; z-index: 0;
-    }
-    body::after {
-      content: ''; position: fixed; inset: 0;
-      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
-      pointer-events: none; z-index: 0;
-    }
-    .wrap { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 56px 24px 100px; }
-    .header { margin-bottom: 48px; }
-    .status-dot { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 14px var(--green); animation: blink 2s infinite; }
-    .status-label { font-size: 11px; color: var(--green); letter-spacing: 3px; text-transform: uppercase; }
-    h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 12vw, 110px); line-height: 0.88; letter-spacing: 2px; color: #fff; margin-bottom: 20px; }
-    h1 span { color: var(--green); }
-    .tagline { font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 500px; }
-    .tagline strong { color: #888; font-weight: 400; }
-    .wallet-bar { border: 1px solid var(--border); border-top: 2px solid #333; background: var(--bg2); padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-    .wallet-info { font-size: 12px; color: var(--muted); }
-    .wallet-address { font-size: 12px; color: var(--green); }
-    .btn-wallet { background: transparent; color: var(--green); border: 1px solid var(--green); padding: 8px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
-    .btn-wallet:hover { background: var(--green); color: #000; }
-    .btn-wallet.connected { border-color: #333; color: #444; cursor: default; }
-    .btn-wallet.connected:hover { background: transparent; color: #444; }
-    .form-box { border: 1px solid var(--border); border-top: 2px solid var(--green); background: var(--bg2); padding: 28px; margin-bottom: 32px; }
-    .form-label { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-    .field { display: flex; flex-direction: column; gap: 6px; }
-    .field label { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
-    .field input { background: var(--bg); border: 1px solid var(--border); border-bottom: 1px solid #333; color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 15px; padding: 12px 14px; outline: none; transition: border-color 0.2s; width: 100%; }
-    .field input:focus { border-color: var(--green); }
-    .field input::placeholder { color: var(--dimmed); }
-    .field .hint { font-size: 10px; color: #333; margin-top: 2px; }
-    .form-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 20px; flex-wrap: wrap; gap: 12px; }
-    .form-hint { font-size: 11px; color: #333; }
-    .btn { background: var(--green); color: #000; border: none; padding: 12px 32px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
-    .btn:hover:not(:disabled) { background: #00cc6a; transform: translateX(3px); }
-    .btn:disabled { background: var(--bg3); color: var(--green); border: 1px solid var(--green); cursor: default; }
-    .status-box { border: 1px solid var(--border); border-left: 3px solid var(--green); background: var(--bg2); padding: 16px 20px; margin-bottom: 24px; font-size: 12px; color: var(--green); display: none; line-height: 2; }
-    .error-box { border: 1px solid var(--red); background: #1a0000; padding: 16px 20px; color: var(--red); font-size: 13px; margin-bottom: 24px; display: none; }
-    #result { display: none; animation: fadeUp 0.4s ease; }
-    .result-header { border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 32px; }
-    .result-meta { font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-bottom: 10px; }
-    .result-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 5vw, 48px); color: #fff; letter-spacing: 1px; margin-bottom: 6px; }
-    .result-sub { font-size: 13px; color: var(--muted); }
-    .verdict-box { padding: 24px 28px; margin-bottom: 28px; border-left: 3px solid var(--green); background: var(--bg2); border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-    .verdict-box.underpaid { border-left-color: var(--red); }
-    .verdict-box.fair { border-left-color: var(--yellow); }
-    .verdict-box.wellpaid { border-left-color: var(--green); }
-    .verdict-label { font-size: 10px; letter-spacing: 2px; color: var(--muted); margin-bottom: 12px; }
-    .verdict-text { font-family: 'IBM Plex Sans', sans-serif; font-size: 16px; font-weight: 600; line-height: 1.7; margin-bottom: 0; }
-    .verdict-text.underpaid { color: var(--red); }
-    .verdict-text.fair { color: var(--yellow); }
-    .verdict-text.wellpaid { color: var(--green); }
-    .bands-label { font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-bottom: 16px; }
-    .bands-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
-    .band { background: var(--bg2); border: 1px solid var(--border); padding: 20px 16px; position: relative; }
-    .band.active { border-color: var(--green); }
-    .band.active::after { content: '◀ YOU'; position: absolute; top: 8px; right: 10px; font-size: 9px; color: var(--green); letter-spacing: 1px; }
-    .band-top { height: 2px; margin: -20px -16px 16px; }
-    .band-top.low { background: var(--red); }
-    .band-top.mid { background: var(--yellow); }
-    .band-top.high { background: var(--green); }
-    .band-name { font-size: 10px; letter-spacing: 2px; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; }
-    .band-usd { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 4px; }
-    .band-label-small { font-size: 10px; color: #333; }
-    .estimate-box { display: flex; justify-content: space-between; align-items: center; background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid var(--green); padding: 20px 24px; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
-    .estimate-left .elabel { font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-bottom: 4px; }
-    .estimate-left .esub { font-size: 11px; color: #444; }
-    .estimate-right .evalue { font-size: 32px; font-weight: 700; color: var(--green); text-align: right; }
-    .estimate-right .ecurrency { font-size: 12px; color: var(--muted); text-align: right; }
-    .floor-box { display: flex; justify-content: space-between; align-items: center; background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid var(--yellow); padding: 20px 24px; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
-    .floor-left .flabel { font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-bottom: 4px; }
-    .floor-left .fsub { font-size: 11px; color: #444; }
-    .floor-right .fvalue { font-size: 28px; font-weight: 700; color: var(--yellow); text-align: right; }
-    .floor-right .fcurrency { font-size: 12px; color: var(--muted); text-align: right; }
+    html { scroll-behavior: smooth; }
 
-    /* INTERVIEW TIPS */
-    .tips-box { background: var(--bg2); border: 1px solid var(--border); border-top: 2px solid var(--yellow); padding: 24px 28px; margin-bottom: 28px; }
-    .tips-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-    .tips-label { font-size: 10px; color: var(--yellow); letter-spacing: 2px; text-transform: uppercase; }
-    .tip-item { display: flex; gap: 16px; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #161616; }
-    .tip-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-    .tip-number { font-size: 22px; font-weight: 700; color: var(--dimmed); flex-shrink: 0; line-height: 1.2; }
-    .tip-content .tip-title { font-size: 12px; color: var(--yellow); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
-    .tip-content .tip-text { font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; color: #888; line-height: 1.7; }
+    body {
+      background: var(--bg);
+      color: var(--cream2);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-    .comparison-box { background: #0a1a0a; border: 1px solid #00ff8722; border-left: 3px solid var(--green); padding: 20px 24px; margin-bottom: 28px; }
-    .comparison-box .clabel { font-size: 10px; color: var(--green); letter-spacing: 2px; margin-bottom: 8px; }
-    .comparison-box .ctext { font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; color: #aaa; line-height: 1.7; }
-    .result-footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #111; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-    .result-footer .left { font-size: 11px; color: #2a2a2a; }
-    .result-footer .right { font-size: 11px; color: var(--green); }
-    .empty-state { margin-top: 40px; padding: 48px; border: 1px dashed var(--dimmed); text-align: center; }
-    .empty-state .globe { font-size: 36px; margin-bottom: 20px; }
-    .empty-state .examples { font-size: 13px; color: #2a2a2a; line-height: 2.2; }
-    .empty-state .examples span { color: #3a3a3a; }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-    @media (max-width: 600px) {
-      .form-grid { grid-template-columns: 1fr; }
-      .bands-grid { grid-template-columns: 1fr; }
-      .wrap { padding: 32px 16px 80px; }
+    /* ANIMATED BG ORBS */
+    .bg-orbs {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(120px); opacity: 0.12;
+      animation: drift 20s infinite alternate ease-in-out;
+    }
+
+    .orb1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, #d4a843, transparent 70%);
+      top: -200px; left: -200px;
+      animation-duration: 25s;
+    }
+
+    .orb2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, #4060ff, transparent 70%);
+      bottom: -100px; right: -100px;
+      animation-duration: 30s; animation-delay: -10s;
+    }
+
+    .orb3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, #d4a843, transparent 70%);
+      top: 50%; right: 20%;
+      animation-duration: 18s; animation-delay: -5s;
+      opacity: 0.06;
+    }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(60px, 40px) scale(1.1); }
+    }
+
+    /* GRAIN OVERLAY */
+    .grain {
+      position: fixed; inset: -50%;
+      width: 200%; height: 200%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 1; opacity: 0.03;
+      animation: grain-shift 8s steps(10) infinite;
+    }
+
+    @keyframes grain-shift {
+      0%,100% { transform: translate(0,0); }
+      10% { transform: translate(-2%,-3%); }
+      20% { transform: translate(3%,1%); }
+      30% { transform: translate(-1%,4%); }
+      40% { transform: translate(2%,-2%); }
+      50% { transform: translate(-3%,3%); }
+      60% { transform: translate(1%,-1%); }
+      70% { transform: translate(-2%,2%); }
+      80% { transform: translate(3%,-3%); }
+      90% { transform: translate(-1%,1%); }
+    }
+
+    /* TOP BAR */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 48px;
+      height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(6,7,13,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 700; font-style: italic;
+      color: var(--cream);
+      letter-spacing: 0.5px;
+    }
+
+    .topbar-logo span { color: var(--gold); }
+
+    .topbar-right {
+      display: flex; align-items: center; gap: 24px;
+    }
+
+    .network-pill {
+      display: flex; align-items: center; gap: 7px;
+      padding: 5px 14px;
+      border: 1px solid var(--border2);
+      background: var(--bg2);
+      border-radius: 2px;
+    }
+
+    .network-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 8px var(--gold);
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .network-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase;
+    }
+
+    .btn-connect-top {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold); background: transparent;
+      border: 1px solid var(--gold3);
+      padding: 7px 18px; cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-connect-top:hover { background: var(--gold); color: var(--bg); }
+    .btn-connect-top.connected { color: var(--muted); border-color: var(--border); cursor: default; }
+    .btn-connect-top.connected:hover { background: transparent; color: var(--muted); }
+
+    .wallet-short {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--gold);
+    }
+
+    /* MAIN */
+    .main { position: relative; z-index: 2; padding-top: 56px; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px 64px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; color: var(--gold3);
+      letter-spacing: 4px; text-transform: uppercase;
+      margin-bottom: 40px;
+      display: flex; align-items: center; gap: 16px;
+      opacity: 0; animation: slideIn 0.8s 0.2s forwards;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 32px; height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+
+    .hero-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(72px, 12vw, 160px);
+      font-weight: 300;
+      line-height: 0.88;
+      color: var(--cream);
+      letter-spacing: -3px;
+      margin-bottom: 12px;
+      opacity: 0; animation: slideIn 0.9s 0.3s forwards;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      font-weight: 600;
+      color: var(--gold);
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(22px, 4vw, 42px);
+      font-weight: 300; font-style: italic;
+      color: var(--muted);
+      margin-bottom: 56px;
+      letter-spacing: -0.5px;
+      opacity: 0; animation: slideIn 0.9s 0.4s forwards;
+    }
+
+    .hero-desc {
+      font-size: 15px; color: var(--muted);
+      line-height: 1.9; font-weight: 300;
+      max-width: 500px; margin-bottom: 64px;
+      opacity: 0; animation: slideIn 0.9s 0.5s forwards;
+    }
+
+    .hero-desc strong { color: var(--gold3); font-weight: 400; }
+
+    .hero-stats {
+      display: flex; gap: 48px; flex-wrap: wrap;
+      opacity: 0; animation: slideIn 0.9s 0.6s forwards;
+    }
+
+    .hero-stat { }
+    .hero-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 40px; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--muted);
+      letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;
+    }
+
+    .hero-scroll {
+      position: absolute; bottom: 40px; left: 64px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--muted);
+      letter-spacing: 3px; text-transform: uppercase;
+      display: flex; align-items: center; gap: 12px;
+      animation: bob 2s infinite ease-in-out;
+    }
+
+    .hero-scroll::after {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--muted);
+    }
+
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+
+    /* FORM SECTION */
+    .form-wrap {
+      padding: 96px 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-left { }
+
+    .section-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--gold3);
+      letter-spacing: 4px; text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .section-kicker::before {
+      content: '';
+      width: 24px; height: 1px;
+      background: var(--gold3);
+    }
+
+    .form-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 52px; font-weight: 600; font-style: italic;
+      color: var(--cream); line-height: 1.05;
+      letter-spacing: -1px; margin-bottom: 24px;
+    }
+
+    .form-intro {
+      font-size: 14px; color: var(--muted);
+      line-height: 1.8; font-weight: 300;
+    }
+
+    .form-right { padding-top: 8px; }
+
+    .field {
+      margin-bottom: 36px;
+      position: relative;
+    }
+
+    .field label {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--muted);
+      letter-spacing: 3px; text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .field input {
+      width: 100%;
+      background: transparent;
+      border: none; border-bottom: 1px solid var(--border2);
+      color: var(--cream);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px; font-weight: 300;
+      padding: 12px 0;
+      outline: none;
+      transition: border-color 0.4s;
+    }
+
+    .field input:focus { border-bottom-color: var(--gold); }
+    .field input::placeholder { color: var(--border2); }
+
+    .field-hint {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--border2);
+      letter-spacing: 1px; margin-top: 6px;
+    }
+
+    .field input:focus + .field-line { transform: scaleX(1); }
+
+    .btn-main {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold3) 0%, var(--gold) 50%, var(--gold2) 100%);
+      background-size: 200% 200%;
+      color: var(--bg);
+      border: none;
+      padding: 20px 32px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 400;
+      letter-spacing: 4px; text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.4s;
+      position: relative; overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .btn-main::before {
+      content: '';
+      position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-main:hover::before { left: 100%; }
+    .btn-main:hover:not(:disabled) { background-position: right center; box-shadow: 0 16px 48px rgba(212,168,67,0.3); transform: translateY(-2px); }
+    .btn-main:disabled { background: var(--border); color: var(--muted); cursor: default; transform: none; box-shadow: none; }
+
+    /* STATUS */
+    .status-wrap { padding: 0 64px; }
+
+    .status-card {
+      margin-top: 32px;
+      padding: 28px 32px;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-left: 2px solid var(--gold3);
+      display: none;
+    }
+
+    .status-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--gold3);
+      letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px;
+    }
+
+    .status-body {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--muted); line-height: 2.2;
+    }
+
+    .error-card {
+      margin-top: 32px;
+      padding: 20px 28px;
+      background: #0d0808;
+      border: 1px solid #3a1515;
+      border-left: 2px solid var(--red);
+      font-size: 13px; color: #c07070;
+      display: none;
+    }
+
+    /* RESULT */
+    #result { display: none; animation: fadeUp 0.8s ease; }
+
+    /* RESULT HERO */
+    .result-hero {
+      padding: 80px 64px 64px;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 48px; align-items: end;
+    }
+
+    .result-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--gold3);
+      letter-spacing: 4px; text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .result-kicker::before { content: ''; width: 24px; height: 1px; background: var(--gold3); }
+
+    .result-job {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(48px, 7vw, 88px);
+      font-weight: 600; font-style: italic;
+      color: var(--cream); line-height: 0.95;
+      letter-spacing: -2px; margin-bottom: 16px;
+    }
+
+    .result-location {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--muted); letter-spacing: 2px;
+    }
+
+    .result-badge {
+      padding: 24px 28px;
+      border: 1px solid var(--border2);
+      background: var(--bg2);
+      text-align: center; flex-shrink: 0;
+    }
+
+    .badge-assessment {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px; font-weight: 700; font-style: italic;
+      margin-bottom: 4px;
+    }
+
+    .badge-assessment.underpaid { color: var(--red); }
+    .badge-assessment.fair { color: var(--gold); }
+    .badge-assessment.wellpaid { color: var(--green); }
+
+    .badge-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase;
+    }
+
+    /* VERDICT */
+    .verdict-section {
+      padding: 56px 64px;
+      border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: 200px 1fr; gap: 48px;
+      align-items: start;
+    }
+
+    .verdict-left { }
+
+    .verdict-left-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .verdict-left-label.underpaid { color: var(--red); }
+    .verdict-left-label.fair { color: var(--gold); }
+    .verdict-left-label.wellpaid { color: var(--green); }
+
+    .verdict-line {
+      width: 2px; height: 80px;
+    }
+
+    .verdict-line.underpaid { background: linear-gradient(180deg, var(--red), transparent); }
+    .verdict-line.fair { background: linear-gradient(180deg, var(--gold), transparent); }
+    .verdict-line.wellpaid { background: linear-gradient(180deg, var(--green), transparent); }
+
+    .verdict-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px; font-weight: 300;
+      line-height: 1.7; letter-spacing: -0.3px;
+    }
+
+    .verdict-text.underpaid { color: #dda0a0; }
+    .verdict-text.fair { color: var(--cream2); }
+    .verdict-text.wellpaid { color: #a0ddb8; }
+
+    /* NUMBERS */
+    .numbers-section {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .num-block {
+      padding: 48px 40px;
+      border-right: 1px solid var(--border);
+      position: relative; overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .num-block:last-child { border-right: none; }
+    .num-block:hover { background: var(--bg2); }
+
+    .num-block.active {
+      background: var(--bg2);
+    }
+
+    .num-block.active::after {
+      content: '← YOUR LEVEL';
+      position: absolute; bottom: 16px; right: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px; color: var(--gold3);
+      letter-spacing: 2px;
+    }
+
+    .num-tier {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .num-tier.low { color: #805050; }
+    .num-tier.mid { color: var(--gold3); }
+    .num-tier.high { color: #508050; }
+
+    .num-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 52px; font-weight: 700;
+      line-height: 1; margin-bottom: 6px;
+      transition: color 0.3s;
+    }
+
+    .num-block:hover .num-value { color: var(--gold); }
+
+    .num-unit {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase;
+    }
+
+    /* KEY METRICS */
+    .metrics-section {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .metric-block {
+      padding: 48px 56px;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+
+    .metric-block:last-child { border-right: none; }
+
+    .metric-block::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    }
+
+    .metric-block.estimate::before { background: linear-gradient(90deg, var(--gold), transparent); }
+    .metric-block.floor::before { background: linear-gradient(90deg, var(--gold3), transparent); }
+
+    .metric-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--muted);
+      letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px;
+    }
+
+    .metric-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 72px; font-weight: 700; line-height: 1;
+      letter-spacing: -2px; margin-bottom: 8px;
+    }
+
+    .metric-block.estimate .metric-value {
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .metric-block.floor .metric-value { color: var(--gold3); }
+
+    .metric-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; color: var(--muted); letter-spacing: 1px;
+    }
+
+    /* TIPS */
+    .tips-section { border-bottom: 1px solid var(--border); }
+
+    .tips-header {
+      padding: 40px 64px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 20px;
+    }
+
+    .tips-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px; font-style: italic; font-weight: 300;
+      color: var(--cream2);
+    }
+
+    .tips-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+    }
+
+    .tip-card {
+      padding: 40px 48px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .tip-card:nth-child(even) { border-right: none; }
+    .tip-card:nth-child(3), .tip-card:nth-child(4) { border-bottom: none; }
+    .tip-card:hover { background: var(--bg2); }
+
+    .tip-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 80px; font-weight: 700; font-style: italic;
+      color: var(--border2); line-height: 1;
+      margin-bottom: 20px;
+      transition: color 0.3s;
+    }
+
+    .tip-card:hover .tip-num { color: var(--border); }
+
+    .tip-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--gold);
+      letter-spacing: 3px; text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .tip-body {
+      font-size: 14px; color: var(--muted);
+      line-height: 1.9; font-weight: 300;
+    }
+
+    /* COMPARISON */
+    .comparison-section {
+      padding: 40px 64px;
+      border-bottom: 1px solid var(--border);
+      background: #080f0a;
+      display: none;
+    }
+
+    .comp-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--green);
+      letter-spacing: 3px; text-transform: uppercase;
+      margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
+    }
+
+    .comp-kicker::before { content: ''; width: 24px; height: 1px; background: var(--green); }
+
+    .comp-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 300;
+      color: #90c8a0; line-height: 1.7;
+    }
+
+    /* FOOTER */
+    .result-footer {
+      padding: 32px 64px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+
+    .footer-left {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--border2); letter-spacing: 2px;
+    }
+
+    .footer-right {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--gold3); letter-spacing: 2px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .footer-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--gold); box-shadow: 0 0 8px var(--gold);
+      animation: pulse-dot 2s infinite;
+    }
+
+    /* EMPTY STATE */
+    .empty-section {
+      padding: 120px 64px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .empty-globe {
+      font-size: 48px; margin-bottom: 32px; opacity: 0.5;
+    }
+
+    .empty-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px; font-style: italic; font-weight: 300;
+      color: var(--muted); margin-bottom: 24px;
+    }
+
+    .empty-examples {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--border2);
+      line-height: 3; letter-spacing: 1px;
+    }
+
+    /* ANIMATIONS */
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero { padding: 60px 32px; }
+      .form-wrap { grid-template-columns: 1fr; padding: 64px 32px; gap: 48px; }
+      .result-hero { grid-template-columns: 1fr; padding: 48px 32px; }
+      .verdict-section { grid-template-columns: 1fr; padding: 40px 32px; }
+      .numbers-section { grid-template-columns: 1fr; }
+      .num-block { border-right: none; border-bottom: 1px solid var(--border); }
+      .metrics-section { grid-template-columns: 1fr; }
+      .metric-block { border-right: none; border-bottom: 1px solid var(--border); }
+      .tips-grid { grid-template-columns: 1fr; }
+      .tip-card { border-right: none; }
+      .status-wrap { padding: 0 32px; }
+      .comparison-section { padding: 32px; }
+      .result-footer { padding: 24px 32px; }
+      .empty-section { padding: 80px 32px; }
+      .tips-header { padding: 32px; }
+      .topbar { padding: 0 24px; }
+      .hero-scroll { left: 32px; }
     }
   </style>
 </head>
 <body>
-<div class="wrap">
 
-  <div class="header">
-    <div class="status-dot">
-      <div class="dot"></div>
-      <span class="status-label">GenLayer Testnet · On-Chain Intelligence</span>
+<div class="bg-orbs">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+<div class="grain"></div>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <div class="topbar-logo">Paid<span>Fair</span></div>
+  <div class="topbar-right">
+    <div class="network-pill">
+      <div class="network-dot"></div>
+      <span class="network-label">GenLayer Testnet</span>
     </div>
-    <h1>PAID<span>FAIR</span></h1>
-    <p class="tagline">
-      Global salary intelligence. Any job. Any country. Any currency.<br>
-      <strong>Powered by multi-validator AI consensus on GenLayer.</strong>
+    <span class="wallet-short" id="walletShort"></span>
+    <button class="btn-connect-top" id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
+  </div>
+</nav>
+
+<div class="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">Global Salary Intelligence Protocol</div>
+    <h1 class="hero-headline">Know Your<br><em>Worth.</em></h1>
+    <div class="hero-sub-line">Any job. Any country. Any currency.</div>
+    <p class="hero-desc">
+      PaidFair uses <strong>multi-validator AI consensus on GenLayer</strong> to determine what your profession is truly worth — across every market on earth. Not one opinion. A network verdict.
     </p>
-  </div>
-
-  <div class="wallet-bar">
-    <div>
-      <div class="wallet-info" id="walletInfo">Connect your wallet to use PaidFair</div>
-      <div class="wallet-address" id="walletAddress"></div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">195+</div>
+        <div class="hero-stat-label">Countries</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">∞</div>
+        <div class="hero-stat-label">Professions</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">On-Chain</div>
+        <div class="hero-stat-label">Verified</div>
+      </div>
     </div>
-    <button class="btn-wallet" id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
-  </div>
+    <div class="hero-scroll">Scroll to analyze</div>
+  </section>
 
-  <div class="form-box">
-    <div class="form-label">&gt; Query Parameters</div>
-    <div class="form-grid">
+  <!-- FORM -->
+  <section class="form-wrap">
+    <div class="form-left">
+      <div class="section-kicker">Start Here</div>
+      <div class="form-title">Enter your<br>query.</div>
+      <p class="form-intro">
+        Type in any language. Our validators will respond in yours. Include your current salary for a personal market comparison.
+      </p>
+    </div>
+    <div class="form-right">
       <div class="field">
         <label>Job Title</label>
-        <input type="text" id="job_title" placeholder="Software Engineer, Farmer, Plumber..." />
+        <input type="text" id="job_title" placeholder="Software Engineer, Farmer, Nurse..." />
+        <div class="field-hint">Any profession in any language</div>
       </div>
       <div class="field">
         <label>Work Region</label>
-        <input type="text" id="work_region" placeholder="Lagos Nigeria, Tokyo Japan..." />
-        <span class="hint">City + Country for best results</span>
+        <input type="text" id="work_region" placeholder="Tokyo Japan · Lagos Nigeria · Berlin Germany" />
+        <div class="field-hint">City + Country for highest accuracy</div>
       </div>
       <div class="field">
         <label>Years of Experience</label>
-        <input type="number" id="years_experience" placeholder="5" min="0" max="50" />
+        <input type="number" id="years_experience" placeholder="0" min="0" max="50" />
       </div>
       <div class="field">
-        <label>Current Annual Salary (USD)</label>
-        <input type="number" id="current_salary" placeholder="Optional — e.g. 30000" min="0" />
-        <span class="hint">Leave empty if you prefer not to share</span>
+        <label>Current Annual Salary (USD) — Optional</label>
+        <input type="number" id="current_salary" placeholder="e.g. 42000" min="0" />
+        <div class="field-hint">For personal market comparison only</div>
       </div>
+      <button class="btn-main" id="analyzeBtn" onclick="analyze()">Analyze My Worth →</button>
     </div>
-    <div class="form-footer">
-      <span class="form-hint">Consensus takes ~2–3 min · Any language accepted</span>
-      <button class="btn" id="analyzeBtn" onclick="analyze()">ANALYZE →</button>
+  </section>
+
+  <div class="status-wrap">
+    <div class="status-card" id="statusBox">
+      <div class="status-title">Processing</div>
+      <div class="status-body" id="statusBody"></div>
     </div>
+    <div class="error-card" id="errorBox"></div>
   </div>
 
-  <div class="status-box" id="statusBox"></div>
-  <div class="error-box" id="errorBox"></div>
-
+  <!-- RESULT -->
   <div id="result">
-    <div class="result-header">
-      <div class="result-meta">ANALYSIS RESULT · VERIFIED ON-CHAIN</div>
-      <div class="result-title" id="r_title"></div>
-      <div class="result-sub" id="r_region"></div>
+
+    <div class="result-hero">
+      <div>
+        <div class="result-kicker">Analysis Result · On-Chain Verified</div>
+        <div class="result-job" id="r_title"></div>
+        <div class="result-location" id="r_region"></div>
+      </div>
+      <div class="result-badge">
+        <div class="badge-assessment" id="r_badge"></div>
+        <div class="badge-sub">Market Verdict</div>
+      </div>
     </div>
 
-    <div class="verdict-box" id="r_verdict_box">
-      <div class="verdict-label">VERDICT</div>
+    <div class="verdict-section">
+      <div class="verdict-left">
+        <div class="verdict-left-label" id="r_verdict_label">Verdict</div>
+        <div class="verdict-line" id="r_verdict_line"></div>
+      </div>
       <div class="verdict-text" id="r_verdict_text"></div>
     </div>
 
-    <div class="bands-label">ANNUAL SALARY BANDS (USD)</div>
-    <div class="bands-grid">
+    <div class="numbers-section">
       <div class="band" id="band_low">
-        <div class="band-top low"></div>
-        <div class="band-name">Entry Level</div>
-        <div class="band-usd" id="r_low"></div>
-        <div class="band-label-small">USD / Year</div>
+        <div class="num-tier low">Entry Level</div>
+        <div class="num-value" id="r_low"></div>
+        <div class="num-unit">USD / Year</div>
       </div>
       <div class="band" id="band_mid">
-        <div class="band-top mid"></div>
-        <div class="band-name">Mid Career</div>
-        <div class="band-usd" id="r_mid"></div>
-        <div class="band-label-small">USD / Year</div>
+        <div class="num-tier mid">Mid Career</div>
+        <div class="num-value" id="r_mid"></div>
+        <div class="num-unit">USD / Year</div>
       </div>
       <div class="band" id="band_high">
-        <div class="band-top high"></div>
-        <div class="band-name">Senior</div>
-        <div class="band-usd" id="r_high"></div>
-        <div class="band-label-small">USD / Year</div>
+        <div class="num-tier high">Senior</div>
+        <div class="num-value" id="r_high"></div>
+        <div class="num-unit">USD / Year</div>
       </div>
     </div>
 
-    <div class="estimate-box">
-      <div class="estimate-left">
-        <div class="elabel">YOUR SALARY ESTIMATE</div>
-        <div class="esub" id="r_exp_label">Based on your experience</div>
+    <div class="metrics-section">
+      <div class="metric-block estimate">
+        <div class="metric-label" id="r_exp_label">Your Salary Estimate</div>
+        <div class="metric-value" id="r_estimate"></div>
+        <div class="metric-sub">USD annually · based on your experience</div>
       </div>
-      <div class="estimate-right">
-        <div class="evalue" id="r_estimate"></div>
-        <div class="ecurrency">USD / Year</div>
-      </div>
-    </div>
-
-    <div class="floor-box">
-      <div class="floor-left">
-        <div class="flabel">NEGOTIATION FLOOR</div>
-        <div class="fsub">Do not accept below this</div>
-      </div>
-      <div class="floor-right">
-        <div class="fvalue" id="r_floor"></div>
-        <div class="fcurrency">USD / Year</div>
+      <div class="metric-block floor">
+        <div class="metric-label">Negotiation Floor</div>
+        <div class="metric-value" id="r_floor"></div>
+        <div class="metric-sub">USD annually · do not accept below this</div>
       </div>
     </div>
 
-    <!-- INTERVIEW TIPS -->
-    <div class="tips-box">
+    <div class="tips-section">
       <div class="tips-header">
-        <div class="tips-label">💡 Interview Negotiation Tips</div>
+        <div class="tips-title">Interview & Negotiation Intelligence</div>
       </div>
-      <div id="r_tips"></div>
+      <div class="tips-grid" id="r_tips"></div>
     </div>
 
-    <div class="comparison-box" id="r_comparison_box" style="display:none">
-      <div class="clabel">YOUR SALARY vs MARKET</div>
-      <div class="ctext" id="r_comparison_text"></div>
+    <div class="comparison-section" id="r_comparison_box">
+      <div class="comp-kicker">Your Salary vs Market</div>
+      <div class="comp-text" id="r_comparison_text"></div>
     </div>
 
     <div class="result-footer">
-      <span class="left">Powered by multi-validator AI consensus · PaidFair Protocol</span>
-      <span class="right">◆ on-chain verified · GenLayer Testnet</span>
+      <span class="footer-left">PaidFair Protocol · Multi-Validator AI Consensus · GenLayer</span>
+      <span class="footer-right"><div class="footer-dot"></div> On-Chain Verified</span>
     </div>
   </div>
 
-  <div class="empty-state" id="emptyState">
-    <div class="globe">🌍</div>
-    <div class="examples">
-      Fliesenleger · Buenos Aires &nbsp;→&nbsp; Tile Layer · Tokyo<br>
-      Plombier · Paris &nbsp;→&nbsp; Software Engineer · Lagos<br>
-      Farmer · Germany &nbsp;→&nbsp; Nurse · Manila Philippines<br>
-      <span>Any job. Any region. Any language.</span>
+  <!-- EMPTY STATE -->
+  <div class="empty-section" id="emptyState">
+    <div class="empty-globe">🌍</div>
+    <div class="empty-title">Any job. Any corner of the earth.</div>
+    <div class="empty-examples">
+      Fliesenleger · Buenos Aires &nbsp;—&nbsp; Tile Layer · Tokyo<br>
+      Plombier · Lomé, Togo &nbsp;—&nbsp; Software Engineer · Lagos<br>
+      Farmer · Germany &nbsp;—&nbsp; Nurse · Manila Philippines
     </div>
   </div>
 
@@ -280,26 +934,19 @@
   let client = null;
 
   async function connectWallet() {
-    if (!window.ethereum) {
-      showError('MetaMask not found. Please install MetaMask to use PaidFair.');
-      return;
-    }
+    if (!window.ethereum) { showError('MetaMask not found. Please install MetaMask.'); return; }
     try {
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       walletAddress = accounts[0];
       try {
         await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: GENLAYER_CHAIN_ID }] });
-      } catch (switchError) {
-        if (switchError.code === 4902) {
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [{ chainId: GENLAYER_CHAIN_ID, chainName: 'GenLayer Studio', rpcUrls: ['https://studio.genlayer.com/api'], nativeCurrency: { name: 'GEN', symbol: 'GEN', decimals: 18 } }]
-          });
-        } else throw switchError;
+      } catch (e) {
+        if (e.code === 4902) {
+          await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [{ chainId: GENLAYER_CHAIN_ID, chainName: 'GenLayer Studio', rpcUrls: ['https://studio.genlayer.com/api'], nativeCurrency: { name: 'GEN', symbol: 'GEN', decimals: 18 } }] });
+        } else throw e;
       }
       client = createClient({ chain: studionet, account: walletAddress });
-      document.getElementById('walletInfo').textContent = 'Wallet connected';
-      document.getElementById('walletAddress').textContent = walletAddress.slice(0,6) + '...' + walletAddress.slice(-4);
+      document.getElementById('walletShort').textContent = walletAddress.slice(0,6) + '...' + walletAddress.slice(-4);
       const btn = document.getElementById('connectBtn');
       btn.textContent = 'Connected';
       btn.classList.add('connected');
@@ -323,67 +970,87 @@
     document.getElementById('emptyState').style.display = 'none';
 
     let dots = 0;
-    const interval = setInterval(() => { dots = (dots + 1) % 4; btn.textContent = 'ANALYZING' + '.'.repeat(dots); }, 400);
+    const interval = setInterval(() => { dots=(dots+1)%4; btn.textContent='Analyzing'+'.'.repeat(dots); }, 400);
 
     try {
-      setStatus('⬡ Submitting to GenLayer network...<br>⬡ MetaMask will ask you to sign the transaction.');
+      setStatus('Submitting to GenLayer — MetaMask will ask you to sign.');
       const txHash = await client.writeContract({ address: CONTRACT_ADDRESS, functionName: 'analyze_salary', args: [job, region, years, salary || ''], value: 0 });
-      setStatus(`⬡ Transaction submitted: <span style="color:#888">${txHash.slice(0,20)}...</span><br>⬡ Validators are independently analyzing your query.<br>⬡ Waiting for consensus — this takes 2–3 minutes...`);
+      setStatus(`Transaction confirmed: ${txHash.slice(0,22)}...\nMultiple AI validators are independently processing your query.\nAwaiting network consensus — approximately 2–3 minutes.`);
       await client.waitForTransactionReceipt({ hash: txHash, status: 'FINALIZED', retries: 60, interval: 5000 });
-      setStatus('⬡ Consensus reached. Fetching result...');
+      setStatus('Consensus reached. Retrieving your verified result...');
       const raw = await client.readContract({ address: CONTRACT_ADDRESS, functionName: 'get_result', args: [walletAddress] });
-      if (!raw) throw new Error('No result returned. Try again.');
+      if (!raw) throw new Error('No result returned from the network. Please try again.');
       const parsed = JSON.parse(raw);
-      if (parsed.error) throw new Error('Contract returned parse error.');
-      setStatus('');
+      if (parsed.error) throw new Error('The contract encountered an error. Please try again.');
+      hideStatus();
       renderResult(parsed, years, salary);
     } catch (e) {
-      setStatus('');
+      hideStatus();
       showError(e.message || 'Analysis failed. Please try again.');
       document.getElementById('emptyState').style.display = 'block';
     } finally {
       clearInterval(interval);
       btn.disabled = false;
-      btn.textContent = 'ANALYZE →';
+      btn.textContent = 'Analyze My Worth →';
     }
   }
 
   function renderResult(d, years, salary) {
     document.getElementById('r_title').textContent = d.job_title || '';
-    document.getElementById('r_region').textContent = '📍 ' + (d.work_region || '') + ' · ' + (d.currency_code || 'USD');
+    document.getElementById('r_region').textContent = '📍 ' + (d.work_region || '') + '  ·  ' + (d.currency_code || 'USD');
+
+    const assessment = (d.assessment || 'FAIR').toUpperCase();
+    const cls = assessment.toLowerCase();
+
+    // Badge
+    const badgeEl = document.getElementById('r_badge');
+    badgeEl.className = 'badge-assessment ' + cls;
+    badgeEl.textContent = assessment === 'UNDERPAID' ? '🔴 Underpaid' : assessment === 'WELLPAID' ? '🟢 Well Paid' : '🟡 Fair Market';
+
+    // Verdict
+    document.getElementById('r_verdict_label').className = 'verdict-left-label ' + cls;
+    document.getElementById('r_verdict_line').className = 'verdict-line ' + cls;
+    document.getElementById('r_verdict_text').className = 'verdict-text ' + cls;
+    document.getElementById('r_verdict_text').textContent = d.verdict || '';
+
+    // Bands
     document.getElementById('r_low').textContent = fmt(d.salary_low_usd);
     document.getElementById('r_mid').textContent = fmt(d.salary_mid_usd);
     document.getElementById('r_high').textContent = fmt(d.salary_high_usd);
+
+    ['band_low','band_mid','band_high'].forEach(id => {
+      const el = document.getElementById(id);
+      el.className = el.className.replace(' active', '').replace('band ', 'num-block ');
+    });
+    // Fix classes
+    document.getElementById('band_low').className = 'num-block';
+    document.getElementById('band_mid').className = 'num-block';
+    document.getElementById('band_high').className = 'num-block';
+
+    const yrs = parseInt(years);
+    const activeId = yrs <= 2 ? 'band_low' : yrs <= 6 ? 'band_mid' : 'band_high';
+    document.getElementById(activeId).classList.add('active');
+
+    // Metrics
     document.getElementById('r_estimate').textContent = fmt(d.your_estimate_usd);
     document.getElementById('r_floor').textContent = fmt(d.negotiation_floor_usd);
-    document.getElementById('r_exp_label').textContent = 'Based on ' + years + ' years of experience';
+    document.getElementById('r_exp_label').textContent = years + ' years of experience';
 
-    const assessment = (d.assessment || 'FAIR').toUpperCase();
-    document.getElementById('r_verdict_box').className  = 'verdict-box '  + assessment.toLowerCase();
-    document.getElementById('r_verdict_text').className = 'verdict-text ' + assessment.toLowerCase();
-    const emoji = assessment === 'UNDERPAID' ? '🔴' : assessment === 'WELLPAID' ? '🟢' : '🟡';
-    document.getElementById('r_verdict_text').textContent = emoji + ' ' + (d.verdict || '');
-
-    ['low','mid','high'].forEach(b => document.getElementById('band_'+b).classList.remove('active'));
-    const yrs = parseInt(years);
-    document.getElementById('band_' + (yrs <= 2 ? 'low' : yrs <= 6 ? 'mid' : 'high')).classList.add('active');
-
-    // INTERVIEW TIPS
-    const tipsContainer = document.getElementById('r_tips');
-    tipsContainer.innerHTML = '';
+    // Tips
+    const tipsEl = document.getElementById('r_tips');
+    tipsEl.innerHTML = '';
     if (d.interview_tips && Array.isArray(d.interview_tips)) {
       d.interview_tips.forEach((tip, i) => {
-        tipsContainer.innerHTML += `
-          <div class="tip-item">
-            <div class="tip-number">0${i+1}</div>
-            <div class="tip-content">
-              <div class="tip-title">${tip.title || ''}</div>
-              <div class="tip-text">${tip.text || ''}</div>
-            </div>
+        tipsEl.innerHTML += `
+          <div class="tip-card">
+            <div class="tip-num">0${i+1}</div>
+            <div class="tip-title">${tip.title || ''}</div>
+            <div class="tip-body">${tip.text || ''}</div>
           </div>`;
       });
     }
 
+    // Comparison
     const compBox = document.getElementById('r_comparison_box');
     if (salary && d.comparison_note) {
       document.getElementById('r_comparison_text').textContent = d.comparison_note;
@@ -393,13 +1060,26 @@
     }
 
     document.getElementById('result').style.display = 'block';
-    document.getElementById('emptyState').style.display = 'none';
     document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function fmt(n) { return '$' + new Intl.NumberFormat('en-US').format(Math.round(n)); }
-  function setStatus(msg) { const b = document.getElementById('statusBox'); b.style.display = msg ? 'block' : 'none'; b.innerHTML = msg || ''; }
-  function showError(msg) { const b = document.getElementById('errorBox'); b.textContent = '⚠ ' + msg; b.style.display = 'block'; }
+
+  function setStatus(msg) {
+    const box = document.getElementById('statusBox');
+    box.style.display = 'block';
+    document.getElementById('statusBody').innerHTML = msg.split('\n').join('<br>');
+  }
+
+  function hideStatus() {
+    document.getElementById('statusBox').style.display = 'none';
+  }
+
+  function showError(msg) {
+    const b = document.getElementById('errorBox');
+    b.textContent = '⚠ ' + msg;
+    b.style.display = 'block';
+  }
 
   window.connectWallet = connectWallet;
   window.analyze = analyze;
