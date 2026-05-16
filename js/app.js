@@ -226,6 +226,12 @@ form.addEventListener('submit', async (e)=>{
 
   stopTimer(); stopProgress();
   populateResults(parsed, {title, region, years, salary});
+
+  // Unlock results immediately — modal is just a preview
+  const resultsSection = $('results-section');
+  resultsSection.classList.add('unlocked');
+  $('empty-section')?.style && ($('empty-section').style.display = 'none');
+
   setTimeout(openModal, 350);
   analysisRunning = false;
 });
@@ -302,10 +308,7 @@ $('modal-close').addEventListener('click', closeModal);
 $('modal-dismiss').addEventListener('click', closeModal);
 $('modal-view').addEventListener('click', ()=>{
   closeModal();
-  const r = $('results-section');
-  r.classList.add('unlocked');
-  $('empty-section')?.style && ($('empty-section').style.display = 'none');
-  setTimeout(()=> scrollTo(r), 100);
+  setTimeout(()=> scrollTo($('results-section')), 100);
 });
 $('modal').addEventListener('click', (e)=>{ if(e.target.id==='modal') closeModal(); });
 

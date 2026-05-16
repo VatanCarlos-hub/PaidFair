@@ -105,7 +105,6 @@ header.nav{
 }
 .net-text .ndot{width:7px;height:7px;border-radius:50%;background:var(--gold-1);box-shadow:0 0 10px rgba(191,149,63,.75);animation:pulse 2.4s ease-in-out infinite;flex-shrink:0}
 @media(max-width:560px){
-  .brand-name-full .full{display:none}
   .net-text{font-size:9.5px;letter-spacing:0.18em}
   .net-text .net-label-long{display:none}
 }
@@ -703,11 +702,13 @@ header.nav{
 /* Tablet & below (≤ 880px) */
 @media(max-width:880px){
   header.nav .nav-row[style]{padding:12px 22px !important;height:56px !important}
-  .hero[style]{padding:18px 22px 36px !important}
+  .hero[style]{padding:18px 22px 96px !important}
   #how[style]{padding:32px 22px !important}
   #form-section[style]{padding:40px 22px !important}
   .section.shell{padding-left:22px;padding-right:22px}
 
+  .brand{flex-shrink:0}
+  .net-text{display:none}
   .wallet{padding:8px 12px;font-size:10.5px;letter-spacing:0.14em}
 
   .hero h1[style]{
@@ -718,7 +719,7 @@ header.nav{
   }
   .lead{font-size:15.5px;line-height:1.65}
 
-  .cta-row{flex-direction:column;align-items:stretch;gap:12px;margin-top:24px}
+  .cta-row{flex-direction:column;align-items:stretch;gap:12px;margin-top:96px}
   .cta-row .btn{width:100%;max-width:100%;min-width:0;padding:15px 22px;font-size:12px;letter-spacing:0.14em}
 
   .eyebrow{font-size:9px;letter-spacing:0.22em;color:rgba(255,255,255,0.42)}
